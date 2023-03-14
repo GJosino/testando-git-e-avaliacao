@@ -1,1 +1,48 @@
-aaaaaaa
+INSERT INTO exames_realizados 
+(rowid_exame, rowid_funcionario, data_exame) 
+VALUES (2, 1, '2020-10-12');
+
+SELECT * FROM exames_realizados 
+
+SELECT 
+  exame_realizado.rowid, 
+  exame.nm_exame, 
+  funcionario.nm_funcionario, 
+  exame_realizado.data_exame 
+FROM 
+  exame_realizado 
+  JOIN exame ON exame_realizado.rowid_exame = exame.rowid 
+  JOIN funcionario ON exame_realizado.rowid_funcionario = funcionario.rowid;
+  
+  
+  
+  QUERIES MAIS IMPORTANTES DE TODAS
+  
+  SELECT 
+  exame_realizado.rowid, 
+  exame.rowid,
+  exame.nm_exame,
+funcionario.rowid, 
+  funcionario.nm_funcionario, 
+  exame_realizado.data_exame 
+FROM 
+  exame_realizado 
+  JOIN exame ON exame_realizado.rowid_exame = exame.rowid 
+  JOIN funcionario ON exame_realizado.rowid_funcionario = funcionario.rowid;
+  
+  
+  
+  //QUERY FINAL
+  
+  
+  SELECT 
+  exame_realizado.rowid id, 
+  exame.rowid exame_id,
+  exame.nm_exame exame_nome,
+funcionario.rowid funcionario_id, 
+  funcionario.nm_funcionario funcionario_nome, 
+  exame_realizado.data_exame 
+FROM 
+  exame_realizado 
+  JOIN exame ON exame_realizado.rowid_exame = exame.rowid 
+  JOIN funcionario ON exame_realizado.rowid_funcionario = funcionario.rowid;

@@ -11,7 +11,7 @@
     <h1>Josino SAÚDE</h1>
     <p><a href="<s:url action='todosExames'/>">Ver Exames</a></p>
     <p><a href="<s:url action='todosFuncionarios'/>">Ver Funcionarios</a></p>
-    <p><a href="<s:url action='todosExames'/>">Ver Funcionarios que agendaram exames</a></p>
+    <p><a href="<s:url action='todosRealizados'/>">Exames Realizados</a></p>
     
     
    

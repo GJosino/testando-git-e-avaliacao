@@ -121,7 +121,7 @@ public class ExameDao extends Dao {
 		}	
 	}
 	
-	public void DeleteByCodigo(Integer codigo) {
+	public void DeleteByCodigo(Integer codigo){
 		StringBuilder query = new StringBuilder("DELETE exame WHERE rowid = ?");
 		try(
 			Connection con = getConexao();
