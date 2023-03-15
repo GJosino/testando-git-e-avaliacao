@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -13,17 +14,24 @@ import br.com.soc.sistema.vo.ExameRealizadoVo;
 
 public class ExameRealizadoDao extends Dao {
 
-	public void insertExameRealizado(ExameRealizadoVo exameRealizadoVo) {
-		StringBuilder query = new StringBuilder("INSERT INTO funcionario (nm_funcionario) values (?)");
+	public void insertExameRealizado(ExameRealizadoVo exameRealizadoVo,Integer exameId, Integer funcionarioId, LocalDate dataExame)
+			throws SQLException {
+		StringBuilder query = new StringBuilder("INSERT INTO exame_realizado \n"
+				+ "(rowid_exame, rowid_funcionario, data_exame) \n"
+				+ "VALUES (?, ?, ?)");
 		try(
 			Connection con = getConexao();
 			PreparedStatement  ps = con.prepareStatement(query.toString())){
 			
-			int i=1;
-	//		ps.setString(i++, exameRealizadoVo.getNome());
+			
+			ps.setInt(1, exameId);
+			ps.setInt(2, funcionarioId);
+			ps.setDate(3, java.sql.Date.valueOf(dataExame));
+			
 			ps.executeUpdate();
 		}catch (SQLException e) {
 			e.printStackTrace();
+			throw new SQLException();
 		}
 		
 	}

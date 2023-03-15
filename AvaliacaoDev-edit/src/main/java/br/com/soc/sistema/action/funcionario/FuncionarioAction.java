@@ -15,7 +15,7 @@ public class FuncionarioAction extends Action {
 	private FuncionarioBusiness business = new FuncionarioBusiness();
 	private FuncionarioFilter filtrar = new FuncionarioFilter();
 	private FuncionarioVo funcionarioVo = new FuncionarioVo();
-	private String lista;
+
 
 	
 	
@@ -68,13 +68,7 @@ public class FuncionarioAction extends Action {
 	public List<OpcoesComboBuscarFuncionarios> getListaOpcoesCombo(){
 		return Arrays.asList(OpcoesComboBuscarFuncionarios.values());
 	}
-	public String getLista() {
-		return lista;
-	}
 
-	public void setLista(String lista) {
-		this.lista = lista;
-	}
 
 	public FuncionarioVo getFuncionarioVo() {
 		return funcionarioVo;

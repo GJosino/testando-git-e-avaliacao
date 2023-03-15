@@ -1,6 +1,9 @@
 package br.com.soc.sistema.business;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import br.com.soc.sistema.dao.examesRealizados.ExameRealizadoDao;
@@ -22,10 +25,16 @@ public class ExameRealizadoBusiness {
 	
 	public void salvarExameRealizado(ExameRealizadoVo exameRealizadoVo) {
 		try {
-		//	if(exameRealizadoVo.getNome().isEmpty())
-		//		throw new IllegalArgumentException("Nome nao pode ser em branco");
+			if(exameRealizadoVo.getDataExame().isEmpty())
+				throw new IllegalArgumentException("Nome nao pode ser em branco");
 			
-			dao.insertExameRealizado(exameRealizadoVo);
+			Integer exameId = Integer.parseInt(exameRealizadoVo.getExameVo().getRowid());
+			Integer funcionarioId = Integer.parseInt(exameRealizadoVo.getFuncionarioVo().getRowid());
+			
+		    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		    LocalDate dataExame = LocalDate.parse(exameRealizadoVo.getDataExame(), formatter);	
+		    
+			dao.insertExameRealizado(exameRealizadoVo, exameId, funcionarioId, dataExame);
 		} catch (Exception e) {
 			throw new BusinessException("Nao foi possivel realizar a inclusao do registro");
 		}

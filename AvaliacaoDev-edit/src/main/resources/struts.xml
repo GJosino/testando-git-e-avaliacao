@@ -34,7 +34,10 @@
         </action>
         
         <action name="*Realizados" class="br.com.soc.sistema.action.exameRealizado.ExameRealizadoAction" method="{1}">
-        	<result name="success">exame_realizado/realizadosTeste.jsp</result>
+        	<result name="success">exame_realizado/testRealizados_b.jsp</result>
+        	<result name="input">exame_realizado/testRealizados_i.jsp</result>
+        	
+        	<result name="redirect" type="redirectAction">todosRealizados</result>
         </action>
         
 		
