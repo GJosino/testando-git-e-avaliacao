@@ -11,7 +11,7 @@
 		<div class="container">
 			<div class="row mt-5 mb-2">
 				<div class="col-sm p-0">
-					<s:form action="/filtrarExames.action">
+					<s:form action="/filtrarRealizados.action">
 						<div class="input-group">
 							<span class="input-group-text">
 								<strong><s:text name="label.buscar.por"/></strong>
@@ -39,16 +39,24 @@
 					<thead>
 						<tr>
 							<th><s:text name="label.id"/></th>
+							<th><s:text name="label.id.exame"/></th>
+							<th><s:text name="label.nome.exame"/></th>
+							<th><s:text name="label.id.funcionario"/></th>
+							<th><s:text name="label.nome.funcionario"/></th>
 							<th><s:text name="label.nome"/></th>
 							<th class="text-end mt-5"><s:text name="label.acao"/></th>
 						</tr>
 					</thead>
 					
 					<tbody>
-						<s:iterator value="exames" >
+						<s:iterator value="examesRealizados" >
 							<tr>
 								<td>${rowid}</td>
-								<td>${nome}</td>
+								<td>${exameVo.rowid}</td>
+								<td>${exameVo.nome}</td>
+								<td>${funcionarioVo.rowid}</td>
+								<td>${funcionarioVo.nome}</td>
+								<td>${dataExame}</td>
 								<td class="text-end">
 									<s:url action="editarExames" var="editar">
 										<s:param name="exameVo.rowid" value="rowid"></s:param>
@@ -71,8 +79,8 @@
 					
 					<tfoot class="table-secondary">
 						<tr>
-							<td colspan="3">
-								<s:url action="novoExames" var="novo"/>
+							<td colspan="12">
+								<s:url action="novoRealizados" var="novo"/>
 								
 								<a href="${novo}" class="btn btn-success">
 									<s:text name="label.novo"/>

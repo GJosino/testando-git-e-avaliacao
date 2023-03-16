@@ -41,7 +41,7 @@ public class ExameRealizadoBusiness {
 		
 	}
 	
-	public List<ExameRealizadoVo> filtrarExameRealizados(ExameRealizadoFilter filter){
+	public List<ExameRealizadoVo> filtrarExamesRealizados(ExameRealizadoFilter filter){
 		List<ExameRealizadoVo> examesRealizados = new ArrayList<>();
 		
 		switch (filter.getOpcoesCombo()) {

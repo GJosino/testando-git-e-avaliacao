@@ -103,8 +103,18 @@ public class ExameRealizadoDao extends Dao {
 		return Collections.emptyList();
 	}
 	public ExameRealizadoVo findByCodigo(Integer codigo){
-		StringBuilder query = new StringBuilder("SELECT rowid id, nm_funcionario nome FROM funcionario ")
-								.append("WHERE rowid = ?");
+		StringBuilder query = new StringBuilder("SELECT\n"
+				+ "exame_realizado.rowid id,\n"
+				+ "exame.rowid exame_id,\n"
+				+ "exame.nm_exame exame_nome,\n"
+				+ "funcionario.rowid funcionario_id, \n"
+				+ "funcionario.nm_funcionario funcionario_nome,\n"
+				+ "exame_realizado.data_exame\n"
+				+ "FROM\n"
+				+ "exame_realizado\n"
+				+ "JOIN exame ON exame_realizado.rowid_exame = exame.rowid\n"
+				+ "JOIN funcionario ON exame_realizado.rowid_funcionario = funcionario.rowid\n"
+				+ "WHERE exame_realizado.rowid = ?;");
 		
 		try(Connection con = getConexao();
 			PreparedStatement ps = con.prepareStatement(query.toString())){
@@ -118,7 +128,11 @@ public class ExameRealizadoDao extends Dao {
 				while (rs.next()) {
 					vo = new ExameRealizadoVo();
 					vo.setRowid(rs.getString("id"));
-		//			vo.setNome(rs.getString("nome"));	
+					vo.getExameVo().setRowid(rs.getString("exame_id"));
+					vo.getExameVo().setNome(rs.getString("exame_nome"));
+					vo.getFuncionarioVo().setRowid(rs.getString("funcionario_id"));
+					vo.getFuncionarioVo().setNome(rs.getString("funcionario_nome"));
+					vo.setDataExame(rs.getString("data_exame"));
 				}
 				return vo;
 			}

@@ -49,7 +49,7 @@ public class ExameRealizadoAction extends Action {
 		if(getFiltrar().isNullOpcoesCombo())
 			return REDIRECT;
 		
-	//	examesRealizados = business.filtrarExamesRealizados(getFiltrar());
+		examesRealizados = business.filtrarExamesRealizados(getFiltrar());
 		
 		return SUCCESS;
 	}
