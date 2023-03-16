@@ -10,7 +10,10 @@ import br.com.soc.sistema.exception.BusinessException;
 public enum OpcoesComboBuscarExamesRealizados {
 	ID("1", "ID"),
 	ID_EXAME("2", "ID EXAME"), 
-	NOME_EXAME("3", "NOME EXAME");
+	NOME_EXAME("3", "NOME EXAME"),
+	ID_FUNCIONARIO("4", "ID FUNCIONARIO"),
+	NOME_FUNCIONARIO("5", "NOME FUNCIONARIO"),
+	DATA_EXAME("6", "DATA EXAME");
 	
 	
 	private String codigo;

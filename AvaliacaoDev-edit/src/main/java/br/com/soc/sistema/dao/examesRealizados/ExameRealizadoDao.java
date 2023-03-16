@@ -4,7 +4,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -62,7 +64,13 @@ public class ExameRealizadoDao extends Dao {
 				vo.getExameVo().setNome(rs.getString("exame_nome"));
 				vo.getFuncionarioVo().setRowid(rs.getString("funcionario_id"));
 				vo.getFuncionarioVo().setNome(rs.getString("funcionario_nome"));
-				vo.setDataExame(rs.getString("data_exame"));
+			
+				
+				DateTimeFormatter formataEntrada = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		        DateTimeFormatter formataSaida = DateTimeFormatter.ofPattern("dd/MM/yyyy");  
+		        LocalDate dataParse = LocalDate.parse(rs.getString("data_exame"), formataEntrada);
+		        String dataExame = dataParse.format(formataSaida);
+				vo.setDataExame(dataExame);
 			
 				examesRealizados.add(vo);
 			}
@@ -74,34 +82,7 @@ public class ExameRealizadoDao extends Dao {
 		return Collections.emptyList();
 	}
 	
-	public List<ExameRealizadoVo> findAllByNome(String nome){
-		StringBuilder query = new StringBuilder("SELECT rowid id, nm_funcionario nome FROM funcionario ")
-								.append("WHERE lower(nm_funcionario) like lower(?)");
-		
-		try(Connection con = getConexao();
-			PreparedStatement ps = con.prepareStatement(query.toString())){
-			int i = 1;
-			
-			ps.setString(i, "%"+nome+"%");
-			
-			try(ResultSet rs = ps.executeQuery()){
-				ExameRealizadoVo vo =  null;
-				List<ExameRealizadoVo> examesRealizados = new ArrayList<>();
-				
-				while (rs.next()) {
-					vo = new ExameRealizadoVo();
-					vo.setRowid(rs.getString("id"));
-			//		vo.setNome(rs.getString("nome"));	
-					
-					examesRealizados.add(vo);
-				}
-				return examesRealizados;
-			}
-		}catch (SQLException e) {
-			e.printStackTrace();
-		}		
-		return Collections.emptyList();
-	}
+	
 	public ExameRealizadoVo findByCodigo(Integer codigo){
 		StringBuilder query = new StringBuilder("SELECT\n"
 				+ "exame_realizado.rowid id,\n"
@@ -132,7 +113,11 @@ public class ExameRealizadoDao extends Dao {
 					vo.getExameVo().setNome(rs.getString("exame_nome"));
 					vo.getFuncionarioVo().setRowid(rs.getString("funcionario_id"));
 					vo.getFuncionarioVo().setNome(rs.getString("funcionario_nome"));
-					vo.setDataExame(rs.getString("data_exame"));
+					DateTimeFormatter formataEntrada = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+			        DateTimeFormatter formataSaida = DateTimeFormatter.ofPattern("dd/MM/yyyy");  
+			        LocalDate dataParse = LocalDate.parse(rs.getString("data_exame"), formataEntrada);
+			        String dataExame = dataParse.format(formataSaida);
+					vo.setDataExame(dataExame);
 				}
 				return vo;
 			}
@@ -171,5 +156,254 @@ public class ExameRealizadoDao extends Dao {
 			e.printStackTrace();
 		}
 	}
+	
+	
+	
+	////////AQUI ESTOU FAZENDO OS MÉTODOS PRO FILTRO
+	// ID_EXAME, NOME_EXAME, ID_FUNCIONARIO, NOME_FUNCIONARIO E DATA EXAME REALIZADO
+
+	public List<ExameRealizadoVo> findByCodigoExame(Integer codigo){
+		StringBuilder query = new StringBuilder("SELECT\n"
+				+ "exame_realizado.rowid id,\n"
+				+ "exame.rowid exame_id,\n"
+				+ "exame.nm_exame exame_nome,\n"
+				+ "funcionario.rowid funcionario_id, \n"
+				+ "funcionario.nm_funcionario funcionario_nome,\n"
+				+ "exame_realizado.data_exame\n"
+				+ "FROM\n"
+				+ "exame_realizado\n"
+				+ "JOIN exame ON exame_realizado.rowid_exame = exame.rowid\n"
+				+ "JOIN funcionario ON exame_realizado.rowid_funcionario = funcionario.rowid\n"
+				+ "WHERE exame.rowid = ?;");
+		
+		try(Connection con = getConexao();
+			PreparedStatement ps = con.prepareStatement(query.toString())){
+			int i = 1;
+			
+			ps.setInt(i, codigo);
+			
+			try(ResultSet rs = ps.executeQuery()){
+				ExameRealizadoVo vo =  null;
+				List<ExameRealizadoVo> examesRealizados = new ArrayList<>();
+				while (rs.next()) {
+					vo = new ExameRealizadoVo();
+					vo.setRowid(rs.getString("id"));
+					vo.getExameVo().setRowid(rs.getString("exame_id"));
+					vo.getExameVo().setNome(rs.getString("exame_nome"));
+					vo.getFuncionarioVo().setRowid(rs.getString("funcionario_id"));
+					vo.getFuncionarioVo().setNome(rs.getString("funcionario_nome"));
+					DateTimeFormatter formataEntrada = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+			        DateTimeFormatter formataSaida = DateTimeFormatter.ofPattern("dd/MM/yyyy");  
+			        LocalDate dataParse = LocalDate.parse(rs.getString("data_exame"), formataEntrada);
+			        String dataExame = dataParse.format(formataSaida);
+					vo.setDataExame(dataExame);
+					examesRealizados.add(vo);
+				}
+				return examesRealizados;
+			}
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}		
+		return null;
+	}
+	
+	public List<ExameRealizadoVo> findByCodigoFuncionario(Integer codigo){
+		StringBuilder query = new StringBuilder("SELECT\n"
+				+ "exame_realizado.rowid id,\n"
+				+ "exame.rowid exame_id,\n"
+				+ "exame.nm_exame exame_nome,\n"
+				+ "funcionario.rowid funcionario_id, \n"
+				+ "funcionario.nm_funcionario funcionario_nome,\n"
+				+ "exame_realizado.data_exame\n"
+				+ "FROM\n"
+				+ "exame_realizado\n"
+				+ "JOIN exame ON exame_realizado.rowid_exame = exame.rowid\n"
+				+ "JOIN funcionario ON exame_realizado.rowid_funcionario = funcionario.rowid\n"
+				+ "WHERE funcionario.rowid = ?;");
+		
+		try(Connection con = getConexao();
+			PreparedStatement ps = con.prepareStatement(query.toString())){
+			int i = 1;
+			
+			ps.setInt(i, codigo);
+			
+			try(ResultSet rs = ps.executeQuery()){
+				ExameRealizadoVo vo =  null;
+				List<ExameRealizadoVo> examesRealizados = new ArrayList<>();
+				while (rs.next()) {
+					vo = new ExameRealizadoVo();
+					vo.setRowid(rs.getString("id"));
+					vo.getExameVo().setRowid(rs.getString("exame_id"));
+					vo.getExameVo().setNome(rs.getString("exame_nome"));
+					vo.getFuncionarioVo().setRowid(rs.getString("funcionario_id"));
+					vo.getFuncionarioVo().setNome(rs.getString("funcionario_nome"));
+					DateTimeFormatter formataEntrada = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+			        DateTimeFormatter formataSaida = DateTimeFormatter.ofPattern("dd/MM/yyyy");  
+			        LocalDate dataParse = LocalDate.parse(rs.getString("data_exame"), formataEntrada);
+			        String dataExame = dataParse.format(formataSaida);
+					vo.setDataExame(dataExame);
+					examesRealizados.add(vo);
+				}
+				return examesRealizados;
+			}
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}		
+		return null;
+	}
+	
+	public List<ExameRealizadoVo> findByNomeExame(String exame){
+		StringBuilder query = new StringBuilder("SELECT\n"
+				+ "exame_realizado.rowid id,\n"
+				+ "exame.rowid exame_id,\n"
+				+ "exame.nm_exame exame_nome,\n"
+				+ "funcionario.rowid funcionario_id, \n"
+				+ "funcionario.nm_funcionario funcionario_nome,\n"
+				+ "exame_realizado.data_exame\n"
+				+ "FROM\n"
+				+ "exame_realizado\n"
+				+ "JOIN exame ON exame_realizado.rowid_exame = exame.rowid\n"
+				+ "JOIN funcionario ON exame_realizado.rowid_funcionario = funcionario.rowid\n"
+				+ "WHERE lower(exame.nm_exame) like lower(?)");
+		
+		try(Connection con = getConexao();
+			PreparedStatement ps = con.prepareStatement(query.toString())){
+			int i = 1;
+			
+			ps.setString(i, "%"+exame+"%");
+			
+			try(ResultSet rs = ps.executeQuery()){
+				ExameRealizadoVo vo =  null;
+				List<ExameRealizadoVo> examesRealizados = new ArrayList<>();
+				while (rs.next()) {
+					vo = new ExameRealizadoVo();
+					vo.setRowid(rs.getString("id"));
+					vo.getExameVo().setRowid(rs.getString("exame_id"));
+					vo.getExameVo().setNome(rs.getString("exame_nome"));
+					vo.getFuncionarioVo().setRowid(rs.getString("funcionario_id"));
+					vo.getFuncionarioVo().setNome(rs.getString("funcionario_nome"));
+					DateTimeFormatter formataEntrada = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+			        DateTimeFormatter formataSaida = DateTimeFormatter.ofPattern("dd/MM/yyyy");  
+			        LocalDate dataParse = LocalDate.parse(rs.getString("data_exame"), formataEntrada);
+			        String dataExame = dataParse.format(formataSaida);
+					vo.setDataExame(dataExame);
+					examesRealizados.add(vo);
+				}
+				return examesRealizados;
+			}
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}		
+		return null;
+	}
+	
+	public List<ExameRealizadoVo> findByNomeFuncionario(String funcionario){
+		StringBuilder query = new StringBuilder("SELECT\n"
+				+ "exame_realizado.rowid id,\n"
+				+ "exame.rowid exame_id,\n"
+				+ "exame.nm_exame exame_nome,\n"
+				+ "funcionario.rowid funcionario_id, \n"
+				+ "funcionario.nm_funcionario funcionario_nome,\n"
+				+ "exame_realizado.data_exame\n"
+				+ "FROM\n"
+				+ "exame_realizado\n"
+				+ "JOIN exame ON exame_realizado.rowid_exame = exame.rowid\n"
+				+ "JOIN funcionario ON exame_realizado.rowid_funcionario = funcionario.rowid\n"
+				+ "WHERE lower(funcionario.nm_funcionario) like lower(?)");
+		
+		try(Connection con = getConexao();
+			PreparedStatement ps = con.prepareStatement(query.toString())){
+			int i = 1;
+			
+			ps.setString(i, "%"+funcionario+"%");
+			
+			try(ResultSet rs = ps.executeQuery()){
+				ExameRealizadoVo vo =  null;
+				List<ExameRealizadoVo> examesRealizados = new ArrayList<>();
+				while (rs.next()) {
+					vo = new ExameRealizadoVo();
+					vo.setRowid(rs.getString("id"));
+					vo.getExameVo().setRowid(rs.getString("exame_id"));
+					vo.getExameVo().setNome(rs.getString("exame_nome"));
+					vo.getFuncionarioVo().setRowid(rs.getString("funcionario_id"));
+					vo.getFuncionarioVo().setNome(rs.getString("funcionario_nome"));
+					DateTimeFormatter formataEntrada = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+			        DateTimeFormatter formataSaida = DateTimeFormatter.ofPattern("dd/MM/yyyy");  
+			        LocalDate dataParse = LocalDate.parse(rs.getString("data_exame"), formataEntrada);
+			        String dataExame = dataParse.format(formataSaida);
+					vo.setDataExame(dataExame);
+					examesRealizados.add(vo);
+				}
+				return examesRealizados;
+			}
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}		
+		return null;
+	}
+	
+	
+	
+	public List<ExameRealizadoVo> findByDataExame(LocalDate data){
+		StringBuilder query = new StringBuilder("SELECT\n"
+				+ "exame_realizado.rowid id,\n"
+				+ "exame.rowid exame_id,\n"
+				+ "exame.nm_exame exame_nome,\n"
+				+ "funcionario.rowid funcionario_id, \n"
+				+ "funcionario.nm_funcionario funcionario_nome,\n"
+				+ "exame_realizado.data_exame\n"
+				+ "FROM\n"
+				+ "exame_realizado\n"
+				+ "JOIN exame ON exame_realizado.rowid_exame = exame.rowid\n"
+				+ "JOIN funcionario ON exame_realizado.rowid_funcionario = funcionario.rowid\n"
+				+ "WHERE exame_realizado.data_exame = ?;");
+		
+		try(Connection con = getConexao();
+			PreparedStatement ps = con.prepareStatement(query.toString())){
+			int i = 1;
+			
+			
+			ps.setDate(i, java.sql.Date.valueOf(data));
+	
+			try(ResultSet rs = ps.executeQuery()){
+				ExameRealizadoVo vo =  null;
+				List<ExameRealizadoVo> examesRealizados = new ArrayList<>();
+				while (rs.next()) {
+					vo = new ExameRealizadoVo();
+					vo.setRowid(rs.getString("id"));
+					vo.getExameVo().setRowid(rs.getString("exame_id"));
+					vo.getExameVo().setNome(rs.getString("exame_nome"));
+					vo.getFuncionarioVo().setRowid(rs.getString("funcionario_id"));
+					vo.getFuncionarioVo().setNome(rs.getString("funcionario_nome"));
+					DateTimeFormatter formataEntrada = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+			        DateTimeFormatter formataSaida = DateTimeFormatter.ofPattern("dd/MM/yyyy");  
+			        LocalDate dataParse = LocalDate.parse(rs.getString("data_exame"), formataEntrada);
+			        String dataExame = dataParse.format(formataSaida);
+					vo.setDataExame(dataExame);
+					examesRealizados.add(vo);
+				}
+				return examesRealizados;
+			}
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}		
+		return null;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 }

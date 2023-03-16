@@ -3,7 +3,6 @@ package br.com.soc.sistema.business;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import br.com.soc.sistema.dao.examesRealizados.ExameRealizadoDao;
@@ -53,9 +52,37 @@ public class ExameRealizadoBusiness {
 					throw new BusinessException(FOI_INFORMADO_CARACTER_NO_LUGAR_DE_UM_NUMERO);
 				}
 			break;
+			
+			case ID_EXAME:
+				try {
+					Integer codigo = Integer.parseInt(filter.getValorBusca());
+					examesRealizados.addAll(dao.findByCodigoExame(codigo));
+				}catch (NumberFormatException e) {
+					throw new BusinessException(FOI_INFORMADO_CARACTER_NO_LUGAR_DE_UM_NUMERO);
+				}
+			break;
 
-			case NOME:
-				examesRealizados.addAll(dao.findAllByNome(filter.getValorBusca()));
+			case NOME_EXAME:
+				examesRealizados.addAll(dao.findByNomeExame(filter.getValorBusca()));
+			break;
+			
+			case ID_FUNCIONARIO:
+				try {
+					Integer codigo = Integer.parseInt(filter.getValorBusca());
+					examesRealizados.addAll(dao.findByCodigoFuncionario(codigo));
+				}catch (NumberFormatException e) {
+					throw new BusinessException(FOI_INFORMADO_CARACTER_NO_LUGAR_DE_UM_NUMERO);
+				}
+			break;
+			
+			case NOME_FUNCIONARIO:
+				examesRealizados.addAll(dao.findByNomeFuncionario(filter.getValorBusca()));
+			break;
+			
+			case DATA_EXAME:
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+			    LocalDate dataExame = LocalDate.parse(filter.getValorBusca(), formatter);
+				examesRealizados.addAll(dao.findByDataExame(dataExame));
 			break;
 		}
 		

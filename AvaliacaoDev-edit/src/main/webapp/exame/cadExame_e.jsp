@@ -8,6 +8,7 @@
 		<link rel='stylesheet' href='webjars/bootstrap/5.1.3/css/bootstrap.min.css'>
 	</head>
 	<body class="bg-secondary">
+	<a href="<s:url  action='inicio'/>" class="btn btn-success mb-3" >Inicio</a>
 
 		<div class="container">
 			<s:form action="/editarExames.action">
