@@ -44,7 +44,7 @@
 							<th><s:text name="label.nome.exame"/></th>
 							<th><s:text name="label.id.funcionario"/></th>
 							<th><s:text name="label.nome.funcionario"/></th>
-							<th><s:text name="label.nome"/></th>
+							<th><s:text name="label.data"/></th>
 							<th class="text-end mt-5"><s:text name="label.acao"/></th>
 						</tr>
 					</thead>
@@ -59,16 +59,16 @@
 								<td>${funcionarioVo.nome}</td>
 								<td>${dataExame}</td>
 								<td class="text-end">
-									<s:url action="editarExames" var="editar">
-										<s:param name="exameVo.rowid" value="rowid"></s:param>
+									<s:url action="editarRealizados" var="editar">
+										<s:param name="exameRealizadoVo.rowid" value="rowid"></s:param>
 									</s:url>
 
 									<a href="${editar}" class="btn btn-warning text-white">
 										<s:text name="label.editar"/>
 									</a>
 
-									<s:url action="deletarExames" var="deletar">
-										<s:param name="exameVo.rowid" value="rowid"></s:param>
+									<s:url action="deletarRealizados" var="deletar">
+										<s:param name="exameRealizadoVo.rowid" value="rowid"></s:param>
 									</s:url>
 									<a href="${deletar}" class="btn btn-danger">
 										<s:text name="label.excluir"/>

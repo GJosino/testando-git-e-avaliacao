@@ -127,14 +127,37 @@ public class ExameRealizadoDao extends Dao {
 		return null;
 	}
 	
-	public void UpdateByCodigo(Integer codigo, String novoValor) {
-		StringBuilder query = new StringBuilder("UPDATE funcionario SET nm_funcionario = ? WHERE rowid = ?");
+	public void UpdateByCodigo(Integer codigo,Integer codExame, Integer codFuncionario, String dataExame) {
+		StringBuilder query = new StringBuilder("UPDATE exame_realizado\n"
+				+ "SET  \n"
+				+ "    rowid_exame = COALESCE(?, rowid_exame), \n"
+				+ "    rowid_funcionario = COALESCE(?, rowid_funcionario), \n"
+				+ "    data_exame = COALESCE(?, data_exame)\n"
+				+ "WHERE rowid = ?;");
 		try(
 			Connection con = getConexao();
 			PreparedStatement  ps = con.prepareStatement(query.toString())){
 			
 			int i=1;
-			ps.setString(i++, novoValor);
+			
+			if(codExame == 0) {
+				ps.setNull(i++, java.sql.Types.INTEGER);
+			} else {
+				ps.setInt(i++, codExame);	
+			}
+			if(codFuncionario == 0) {
+				ps.setNull(i++, java.sql.Types.INTEGER);
+			} else {
+				ps.setInt(i++, codFuncionario);	
+			}
+			if(dataExame.isEmpty()) {
+				ps.setDate(i++, null);
+				
+			} else {
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+				LocalDate data = LocalDate.parse(dataExame, formatter);
+				ps.setDate(i++, java.sql.Date.valueOf(data));
+			}
 			ps.setInt(i++, codigo);
 			ps.executeUpdate();
 		}catch (SQLException e) {
@@ -144,7 +167,7 @@ public class ExameRealizadoDao extends Dao {
 }
 	
 	public void DeleteByCodigo(Integer codigo) {
-		StringBuilder query = new StringBuilder("DELETE funcionario WHERE rowid = ?");
+		StringBuilder query = new StringBuilder("DELETE exame_realizado WHERE rowid = ?");
 		try(
 			Connection con = getConexao();
 			PreparedStatement  ps = con.prepareStatement(query.toString())){

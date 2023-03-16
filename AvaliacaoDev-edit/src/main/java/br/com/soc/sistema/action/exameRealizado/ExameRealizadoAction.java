@@ -59,12 +59,14 @@ public class ExameRealizadoAction extends Action {
 			return REDIRECT;
 		
 	//	String novoValor = exameRealizadoVo.getNome();
-		
-		//if(exameRealizadoVo.getNome() == null) {
-	//	return UPDATE;
-	//	}
-	//	business.editarExameRealizado(exameRealizadoVo, novoValor);
+		if(exameRealizadoVo.getDataExame() == null) {
+			getExames().addAll(examesBusiness.trazerTodosOsExames());
+			getFuncionarios().addAll(funcionariosBusiness.trazerTodosOsFuncionarios());
+		return UPDATE;
+		}
+		business.editarExameRealizado(exameRealizadoVo);
 		return REDIRECT;
+
 	}
 
 		public String deletar() {

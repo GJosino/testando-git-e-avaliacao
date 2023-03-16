@@ -97,12 +97,17 @@ public class ExameRealizadoBusiness {
 			throw new BusinessException(FOI_INFORMADO_CARACTER_NO_LUGAR_DE_UM_NUMERO);
 		}
 	}
-	public void editarExameRealizado(ExameRealizadoVo exameRealizadoVo, String novoValor) {
+	public void editarExameRealizado(ExameRealizadoVo exameRealizadoVo) {
 		try {
 	//		if(exameRealizadoVo.getNome().isEmpty())
 	//			throw new IllegalArgumentException("Nome nao pode ser em branco");
 			Integer cod = Integer.parseInt(exameRealizadoVo.getRowid());
-			dao.UpdateByCodigo(cod, novoValor);
+			Integer codExame = Integer.parseInt(exameRealizadoVo.getExameVo().getRowid());
+			Integer codFuncionario = Integer.parseInt(exameRealizadoVo.getFuncionarioVo().getRowid());
+			String dataExame = exameRealizadoVo.getDataExame();
+			
+			
+			dao.UpdateByCodigo(cod, codExame, codFuncionario, dataExame);
 		}catch (NumberFormatException e) {
 			throw new BusinessException(FOI_INFORMADO_CARACTER_NO_LUGAR_DE_UM_NUMERO);
 		}
