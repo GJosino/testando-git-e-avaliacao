@@ -4,8 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.Year;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -416,25 +416,25 @@ public class ExameRealizadoDao extends Dao {
 	
 	
 	
-	/////////////////////////////////////////////RELATÓRIOS
+	/////////////////////////////////////////////RELATÓRIOS (PROCURAR POR DATA, POR DIA, MES, ANO)
 		
 	
-	public List<ExameRealizadoVo> findRelatorios(String dataInicial, String dataFinal){
+	public List<ExameRealizadoVo> findRelatoriosData(String dataInicial, String dataFinal){
 		LocalDate unicaDataInserida = null;
 		LocalDate dataInicialFormatada = null;
 		LocalDate dataFinalFormatada = null;
 		if(!dataInicial.isEmpty()) {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 			dataInicialFormatada = LocalDate.parse(dataInicial, formatter);	
-		} else {
-			dataInicialFormatada = null;
-		}
+		} //else {
+		//	dataInicialFormatada = null;
+		//}
 		if(!dataFinal.isEmpty()){
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 			dataFinalFormatada = LocalDate.parse(dataFinal, formatter);
-		} else {
-			dataFinalFormatada = null;
-		}
+		} //else {
+		//	dataFinalFormatada = null;
+		//}
 		
 		StringBuilder query = new StringBuilder("SELECT\n"
 				+ "exame_realizado.rowid id,\n"
@@ -490,10 +490,81 @@ public class ExameRealizadoDao extends Dao {
 			}
 		}catch (SQLException e) {
 			e.printStackTrace();
+		
 		}		
 		return null;
 	}
 	
+	
+	
+	public List<ExameRealizadoVo> findRelatoriosDia(String dataInicial, String dataFinal){
+		Integer dataInicialFormatada = null;
+		Integer dataFinalFormatada = null;
+		if(!dataInicial.isEmpty()) {
+			dataInicialFormatada = Integer.parseInt(dataInicial);			
+		}
+		if(!dataFinal.isEmpty()) {
+			dataFinalFormatada = Integer.parseInt(dataFinal);			
+		}
+		Integer unicaDataInserida = null;
+		StringBuilder query = new StringBuilder("SELECT\n"
+				+ "exame_realizado.rowid id,\n"
+				+ "exame.rowid exame_id,\n"
+				+ "exame.nm_exame exame_nome,\n"
+				+ "funcionario.rowid funcionario_id, \n"
+				+ "funcionario.nm_funcionario funcionario_nome,\n"
+				+ "exame_realizado.data_exame\n"
+				+ "FROM\n"
+				+ "exame_realizado\n"
+				+ "JOIN exame ON exame_realizado.rowid_exame = exame.rowid\n"
+				+ "JOIN funcionario ON exame_realizado.rowid_funcionario = funcionario.rowid\n");
+				if(dataFinalFormatada == null) {
+					unicaDataInserida = dataInicialFormatada;
+					query.append("WHERE DAY(exame_realizado.data_exame) >= ?;");
+				}else if(dataInicialFormatada == null) {
+					unicaDataInserida = dataFinalFormatada;
+					query.append("WHERE DAY(exame_realizado.data_exame) <= ?;");
+				} else {
+					query.append("WHERE DAY(exame_realizado.data_exame) BETWEEN ? AND ?;");
+				}
+			
+				//+ "WHERE exame_realizado.data_exame >= '2020-10-12';");
+		try(Connection con = getConexao();
+			PreparedStatement ps = con.prepareStatement(query.toString())){
+			int i = 1;
+			
+				if(unicaDataInserida == null) {
+					ps.setInt(1, dataInicialFormatada);
+					ps.setInt(2, dataFinalFormatada);
+				} else {
+					ps.setInt(1, (unicaDataInserida));
+				}
+	
+			try(ResultSet rs = ps.executeQuery()){
+				ExameRealizadoVo vo =  null;
+				List<ExameRealizadoVo> examesRealizados = new ArrayList<>();
+				while (rs.next()) {
+					vo = new ExameRealizadoVo();
+					vo.setRowid(rs.getString("id"));
+					vo.getExameVo().setRowid(rs.getString("exame_id"));
+					vo.getExameVo().setNome(rs.getString("exame_nome"));
+					vo.getFuncionarioVo().setRowid(rs.getString("funcionario_id"));
+					vo.getFuncionarioVo().setNome(rs.getString("funcionario_nome"));
+					DateTimeFormatter formataEntrada = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+			        DateTimeFormatter formataSaida = DateTimeFormatter.ofPattern("dd/MM/yyyy");  
+			        LocalDate dataParse = LocalDate.parse(rs.getString("data_exame"), formataEntrada);
+			        String dataExame = dataParse.format(formataSaida);
+					vo.setDataExame(dataExame);
+					examesRealizados.add(vo);
+				}
+				return examesRealizados;
+			}
+		}catch (SQLException e) {
+			e.printStackTrace();
+		
+		}		
+		return null;
+	}
 	
 	
 	

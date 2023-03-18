@@ -132,12 +132,7 @@ public class ExameRealizadoBusiness {
 	
 	
 	
-///////////////////////////////////////LOGICA DO RELATORIOS
-	
-	
-	
-	
-	
+///////////////////////////////////////LOGICA DO RELATORIOS POR DATA, DIA, DIA, MES, ANO
 	
 	
 	public List<ExameRealizadoVo> filtrarRelatorios(RelatorioFilter filter){
@@ -149,7 +144,7 @@ public class ExameRealizadoBusiness {
 					//Integer codigo = Integer.parseInt(filter.getDataInicial());
 					//examesRealizados.add(dao.findByCodigo(codigo));
 					
-					examesRealizados.addAll(dao.findRelatorios(filter.getDataInicial(), filter.getDataFinal() ));
+					examesRealizados.addAll(dao.findRelatoriosData(filter.getDataInicial(), filter.getDataFinal() ));
 				}catch (NumberFormatException e) {
 					throw new BusinessException(FOI_INFORMADO_CARACTER_NO_LUGAR_DE_UM_NUMERO);
 				}
@@ -157,8 +152,10 @@ public class ExameRealizadoBusiness {
 			
 			case DIA:
 				try {
-					Integer codigo = Integer.parseInt(filter.getValorBusca());
-					examesRealizados.addAll(dao.findByCodigoExame(codigo));
+					//Integer codigo = Integer.parseInt(filter.getDataInicial());
+					//examesRealizados.add(dao.findByCodigo(codigo));
+					
+					examesRealizados.addAll(dao.findRelatoriosDia(filter.getDataInicial(), filter.getDataFinal() ));
 				}catch (NumberFormatException e) {
 					throw new BusinessException(FOI_INFORMADO_CARACTER_NO_LUGAR_DE_UM_NUMERO);
 				}
