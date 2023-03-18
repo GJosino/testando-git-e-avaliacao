@@ -16,7 +16,7 @@ public abstract class Dao implements AutoCloseable{
 	}
 	
 	private void conectar() {
-		StringBuilder urlBuilder = new StringBuilder("jdbc:h2:mem:avaliacao;")
+		StringBuilder urlBuilder = new StringBuilder("jdbc:h2:mem:avaliacao;")			
 										.append("DB_CLOSE_DELAY=-1;")
 										.append("DATABASE_TO_UPPER=false;");
 		

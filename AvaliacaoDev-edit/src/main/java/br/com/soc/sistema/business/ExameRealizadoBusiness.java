@@ -8,6 +8,7 @@ import java.util.List;
 import br.com.soc.sistema.dao.examesRealizados.ExameRealizadoDao;
 import br.com.soc.sistema.exception.BusinessException;
 import br.com.soc.sistema.filter.ExameRealizadoFilter;
+import br.com.soc.sistema.filter.RelatorioFilter;
 import br.com.soc.sistema.vo.ExameRealizadoVo;
 
 public class ExameRealizadoBusiness {
@@ -35,7 +36,7 @@ public class ExameRealizadoBusiness {
 		    
 			dao.insertExameRealizado(exameRealizadoVo, exameId, funcionarioId, dataExame);
 		} catch (Exception e) {
-			throw new BusinessException("Nao foi possivel realizar a inclusao do registro");
+			throw new BusinessException("Nao foi possivel realizar a inclusao do registro, todos os campos devem ser preenchidos e a data deve ser no formato DD/MM/YYYY");
 		}
 		
 	}
@@ -122,4 +123,56 @@ public class ExameRealizadoBusiness {
 			throw new BusinessException(FOI_INFORMADO_CARACTER_NO_LUGAR_DE_UM_NUMERO);
 		}
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+///////////////////////////////////////LOGICA DO RELATORIOS
+	
+	
+	
+	
+	
+	
+	
+	public List<ExameRealizadoVo> filtrarRelatorios(RelatorioFilter filter){
+		List<ExameRealizadoVo> examesRealizados = new ArrayList<>();
+		
+		switch (filter.getOpcoesCombo()) {
+			case DATA:
+				try {
+					//Integer codigo = Integer.parseInt(filter.getDataInicial());
+					//examesRealizados.add(dao.findByCodigo(codigo));
+					
+					examesRealizados.addAll(dao.findRelatorios(filter.getDataInicial(), filter.getDataFinal() ));
+				}catch (NumberFormatException e) {
+					throw new BusinessException(FOI_INFORMADO_CARACTER_NO_LUGAR_DE_UM_NUMERO);
+				}
+			break;
+			
+			case DIA:
+				try {
+					Integer codigo = Integer.parseInt(filter.getValorBusca());
+					examesRealizados.addAll(dao.findByCodigoExame(codigo));
+				}catch (NumberFormatException e) {
+					throw new BusinessException(FOI_INFORMADO_CARACTER_NO_LUGAR_DE_UM_NUMERO);
+				}
+			break;
+		}
+		
+		return examesRealizados;
+	}
+
+	
+	
+	
+	
+	
+	
+	
 }

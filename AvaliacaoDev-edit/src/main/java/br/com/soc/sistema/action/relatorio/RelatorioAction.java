@@ -1,4 +1,4 @@
-package br.com.soc.sistema.action.exameRealizado;
+package br.com.soc.sistema.action.relatorio;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,16 +10,16 @@ import br.com.soc.sistema.business.FuncionarioBusiness;
 import br.com.soc.sistema.filter.ExameRealizadoFilter;
 import br.com.soc.sistema.filter.RelatorioFilter;
 import br.com.soc.sistema.infra.Action;
-import br.com.soc.sistema.infra.OpcoesComboBuscarExamesRealizados;
 import br.com.soc.sistema.infra.OpcoesComboBuscarRelatorios;
 import br.com.soc.sistema.vo.ExameRealizadoVo;
 import br.com.soc.sistema.vo.ExameVo;
 import br.com.soc.sistema.vo.FuncionarioVo;
 
-public class ExameRealizadoAction extends Action {
+public class RelatorioAction extends Action {
 	private List<ExameRealizadoVo> examesRealizados = new ArrayList<>();
 	private ExameRealizadoBusiness business = new ExameRealizadoBusiness();
-	private ExameRealizadoFilter filtrar = new ExameRealizadoFilter();
+	//private ExameRealizadoFilter filtrar = new ExameRealizadoFilter();
+	private RelatorioFilter filtrar = new RelatorioFilter();
 	private ExameRealizadoVo exameRealizadoVo = new ExameRealizadoVo();
 	
 	private List<FuncionarioVo> funcionarios = new ArrayList<>();
@@ -34,21 +34,12 @@ public class ExameRealizadoAction extends Action {
 		return SUCCESS;
 	}
 	
-	public String novo() {
-		if(exameRealizadoVo.getDataExame() == null) {
-		getExames().addAll(examesBusiness.trazerTodosOsExames());
-		getFuncionarios().addAll(funcionariosBusiness.trazerTodosOsFuncionarios());
-			return INPUT;
-		}
-		
-		business.salvarExameRealizado(exameRealizadoVo);
-		return REDIRECT;	
-	}
+
 	public String filtrar() {
 		if(getFiltrar().isNullOpcoesCombo())
 			return REDIRECT;
 		
-		examesRealizados = business.filtrarExamesRealizados(getFiltrar());
+		examesRealizados = business.filtrarRelatorios(getFiltrar());
 		
 		return SUCCESS;
 	}
@@ -81,8 +72,8 @@ public class ExameRealizadoAction extends Action {
 
 	
 		
-	public List<OpcoesComboBuscarExamesRealizados> getListaOpcoesCombo(){
-		return Arrays.asList(OpcoesComboBuscarExamesRealizados.values());
+	public List<OpcoesComboBuscarRelatorios> getListaOpcoesCombo(){
+		return Arrays.asList(OpcoesComboBuscarRelatorios.values());
 	}
 
 
@@ -102,11 +93,11 @@ public class ExameRealizadoAction extends Action {
 		this.examesRealizados = examesRealizados;
 	}
 
-	public ExameRealizadoFilter getFiltrar() {
+	public RelatorioFilter getFiltrar() {
 		return filtrar;
 	}
 
-	public void setFiltrar(ExameRealizadoFilter filtrar) {
+	public void setFiltrar(RelatorioFilter filtrar) {
 		this.filtrar = filtrar;
 	}
 

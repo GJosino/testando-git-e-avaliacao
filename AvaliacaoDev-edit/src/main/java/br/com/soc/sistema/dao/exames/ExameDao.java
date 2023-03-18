@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.List;
 
 import br.com.soc.sistema.dao.Dao;
+import br.com.soc.sistema.exception.DaoException;
 import br.com.soc.sistema.vo.ExameVo;
 
 public class ExameDao extends Dao {
@@ -132,6 +133,7 @@ public class ExameDao extends Dao {
 			ps.executeUpdate();
 		}catch (SQLException e) {
 			e.printStackTrace();
+			throw new DaoException("Não foi possivel fazer o exclusão do exame pois ele está vinculado á um funcionário.");
 		}
 	}
 	

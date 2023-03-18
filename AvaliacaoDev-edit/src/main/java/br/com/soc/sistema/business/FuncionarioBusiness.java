@@ -2,6 +2,8 @@ package br.com.soc.sistema.business;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import br.com.soc.sistema.dao.funcionarios.FuncionarioDao;
 import br.com.soc.sistema.exception.BusinessException;
@@ -25,9 +27,15 @@ public class FuncionarioBusiness {
 			if(funcionarioVo.getNome().isEmpty())
 				throw new IllegalArgumentException("Nome nao pode ser em branco");
 			
+			Pattern pattern = Pattern.compile("\\d+"); // compila a expressão regular
+		    Matcher matcher = pattern.matcher(funcionarioVo.getNome());
+		    if (matcher.find()) { // verifica se não há correspondências na string
+		    	throw new IllegalArgumentException("Nome nao pode ter números");
+		      }
+			
 			dao.insertFuncionario(funcionarioVo);
 		} catch (Exception e) {
-			throw new BusinessException("Nao foi possivel realizar a inclusao do registro");
+			throw new BusinessException("Nao foi possivel realizar a inclusao do registro, o dado não pode ser em branco nem possuir números");
 		}
 		
 	}
@@ -65,6 +73,12 @@ public class FuncionarioBusiness {
 		try {
 			if(funcionarioVo.getNome().isEmpty())
 				throw new IllegalArgumentException("Nome nao pode ser em branco");
+			
+			Pattern pattern = Pattern.compile("\\d+"); // compila a expressão regular
+		    Matcher matcher = pattern.matcher(funcionarioVo.getNome());
+		    if (matcher.find()) { // verifica se não há correspondências na string
+		    	throw new IllegalArgumentException("Nome nao pode ter números");
+		      }
 			Integer cod = Integer.parseInt(funcionarioVo.getRowid());
 			dao.UpdateByCodigo(cod, novoValor);
 		}catch (NumberFormatException e) {

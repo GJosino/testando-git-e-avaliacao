@@ -26,9 +26,9 @@ public class ExameBusiness {
 			if(exameVo.getNome().isEmpty())
 				throw new IllegalArgumentException("Nome nao pode ser em branco");
 			
-			dao.insertExame(exameVo);
+				dao.insertExame(exameVo);
 		} catch (Exception e) {
-			throw new BusinessException("Nao foi possivel realizar a inclusao do registro");
+			throw new BusinessException("Nao foi possivel realizar a inclusao do registro, O registro não pode ser em branco");
 		}
 		
 	}	

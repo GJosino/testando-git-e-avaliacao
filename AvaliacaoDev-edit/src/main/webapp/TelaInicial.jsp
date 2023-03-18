@@ -12,27 +12,13 @@
     <p><a href="<s:url action='todosExames'/>">Ver Exames</a></p>
     <p><a href="<s:url action='todosFuncionarios'/>">Ver Funcionarios</a></p>
     <p><a href="<s:url action='todosRealizados'/>">Exames Realizados</a></p>
-    
+    <p><a href="<s:url action='todosRelatorios'/>">Relatorios</a></p>
+  
     
    
 
 
-<%-- <p>Abaixo Exemplos para eu nao esquecer</p>
-<s:url action="inicio" var="helloLink">
 
-  <s:param name="userName">Bruce Phillips</s:param>
-</s:url>
-
-<p><a href="${helloLink}">Hello Bruce Phillips</a></p>
-
-<s:form action="inicio">
-  <s:textfield name="funcionarioVo.nome" label="Your name" />
-  <s:submit value="Submit" />
-</s:form>
-
-<p><a href="inicio.action">Please register</a> for our prize drawing.</p> --%>
-    
-    
     
   </body>
 </html>
