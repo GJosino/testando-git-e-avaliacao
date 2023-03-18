@@ -30,7 +30,7 @@ public class RelatorioAction extends Action {
 	
 	
 	public String todos() {
-		getExamesRealizados().addAll(business.trazerTodosOsExamesRealizados());	
+		//getExamesRealizados().addAll(business.trazerTodosOsExamesRealizados());	
 		return SUCCESS;
 	}
 	

@@ -67,13 +67,18 @@
 					
 					<tfoot class="table-secondary">
 						<tr>
-							<td colspan="12">
+							<td colspan="1">
 								<s:url action="novoRealizados" var="novo"/>
 								
 								<a href="${novo}" class="btn btn-success">
 									<s:text name="label.novo"/>
 								</a>
 							</td>
+								<td colspan="11">
+								<s:text name="Exames encontrados: "/>${examesRealizados.size()}
+								</td>
+							
+									
 						</tr>
 					</tfoot>				
 				</table>

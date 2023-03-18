@@ -160,6 +160,28 @@ public class ExameRealizadoBusiness {
 					throw new BusinessException(FOI_INFORMADO_CARACTER_NO_LUGAR_DE_UM_NUMERO);
 				}
 			break;
+			
+			case MES:
+				try {
+					//Integer codigo = Integer.parseInt(filter.getDataInicial());
+					//examesRealizados.add(dao.findByCodigo(codigo));
+					
+					examesRealizados.addAll(dao.findRelatoriosMes(filter.getDataInicial(), filter.getDataFinal() ));
+				}catch (NumberFormatException e) {
+					throw new BusinessException(FOI_INFORMADO_CARACTER_NO_LUGAR_DE_UM_NUMERO);
+				}
+			break;
+			
+			case ANO:
+				try {
+					//Integer codigo = Integer.parseInt(filter.getDataInicial());
+					//examesRealizados.add(dao.findByCodigo(codigo));
+					
+					examesRealizados.addAll(dao.findRelatoriosAno(filter.getDataInicial(), filter.getDataFinal() ));
+				}catch (NumberFormatException e) {
+					throw new BusinessException(FOI_INFORMADO_CARACTER_NO_LUGAR_DE_UM_NUMERO);
+				}
+			break;
 		}
 		
 		return examesRealizados;
