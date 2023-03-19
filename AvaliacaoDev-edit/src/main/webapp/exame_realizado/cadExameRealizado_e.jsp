@@ -37,23 +37,29 @@
 							</div>	
 						</div>
 						
-						<%--SELECT DE EXAMES --%>	
-		<s:select label="Select Subject"
+		<%--SELECT DE EXAMES --%>
+
+		<s:select
+			cssClass="form-select mb-1"
+		 	label="Select Subject"
 			listKey="%{rowid}"
 			listValueKey="%{nome}"
 			headerKey="0" headerValue="Nome do Exame"
 			list="exames" name="exameRealizadoVo.exameVo.rowid"
-			value="exameVo.rowid" />
+			value="exameVo.rowid"
+			 />
 			
 <%--SELECT DE FUNCIONARIOS --%>	
-		<s:select label="Select Subject"
+
+		<s:select 
+			cssClass="form-select"
+			label="Select Subject"
 			listKey="%{rowid}"
 			listValueKey="%{nome}"
 			headerKey="0" headerValue="Nome do Funcionario"
 			list="funcionarios" name="exameRealizadoVo.funcionarioVo.rowid"
 			value="funcionarioVo.rowid" />
-	
-	
+
 	
 		<label>Data do Exame</label>
   		<s:textfield name="exameRealizadoVo.dataExame" label="Data do Exame" placeholder="dd/mm/aaaa" />

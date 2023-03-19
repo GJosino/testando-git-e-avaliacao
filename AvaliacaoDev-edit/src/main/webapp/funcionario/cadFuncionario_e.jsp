@@ -10,18 +10,18 @@
 	<body class="bg-secondary">
 <a href="<s:url  action='inicio'/>" class="btn btn-success mb-3" >Inicio</a>
 		<div class="container">
-			<s:form action="/novoRealizados.action">
+			<s:form action="/editarFuncionarios.action">
 
 				<div class="card mt-5">
 					<div class="card-header">
 						<div class="row">
 							<div class="col-sm-5">
-								<s:url action="todosRealizados" var="todos"/>
-								<a href="${todos}" class="btn btn-success" >Realizados</a>
+								<s:url action="todosFuncionarios" var="todos"/>
+								<a href="${todos}" class="btn btn-success" >Funcionarios</a>
 							</div>
 							
 							<div class="col-sm">
-								<h5 class="card-title">Cadastrar Novo Exame Realizado</h5>
+								<h5 class="card-title">Editar Funcionario</h5>
 							</div>
 						</div>
 					</div>
@@ -33,34 +33,19 @@
 							</label>	
 
 							<div class="col-sm-2">
-								<s:textfield cssClass="form-control" id="id" name="exameRealizadoVo.rowid" readonly="true"/>							
+								<s:textfield cssClass="form-control" id="id" name="funcionarioVo.rowid" readonly="true"/>							
 							</div>	
 						</div>
 						
-						<%--SELECT DE EXAMES --%>	
-		<s:select
-		 cssClass="form-select mb-1"		
-		 label="Select Subject"
-			listKey="%{rowid}"
-			listValueKey="%{nome}"
-			headerKey="-1" headerValue="Nome do Exame"
-			list="exames" name="exameRealizadoVo.exameVo.rowid"
-			value="exameVo.rowid" />
-			
-<%--SELECT DE FUNCIONARIOS --%>	
-		<s:select
-		    cssClass="form-select"
-		    label="Select Subject"
-			listKey="%{rowid}"
-			listValueKey="%{nome}"
-			headerKey="-1" headerValue="Nome do Funcionario"
-			list="funcionarios" name="exameRealizadoVo.funcionarioVo.rowid"
-			value="funcionarioVo.rowid" />
-	
-	
-	
-		<label>Data do Exame</label>
-  		<s:textfield name="exameRealizadoVo.dataExame" label="Data do Exame" placeholder="dd/mm/aaaa" />
+						<div class="row align-items-center mt-3">
+							<label for="nome" class="col-sm-1 col-form-label text-center">
+								Nome:
+							</label>	
+
+							<div class="col-sm-5">
+								<s:textfield cssClass="form-control" id="nome" name="funcionarioVo.nome"/>							
+							</div>	
+						</div>
 					</div>
 
 					<div class="card-footer">

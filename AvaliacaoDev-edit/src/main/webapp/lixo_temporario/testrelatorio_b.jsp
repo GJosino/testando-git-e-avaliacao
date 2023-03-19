@@ -12,7 +12,7 @@
 		<div class="container">
 			<div class="row mt-5 mb-2">
 				<div class="col-sm p-0">
-					<s:form action="/filtrarFuncionarios.action">
+					<s:form action="/filtrarRelatorios.action">
 						<div class="input-group">
 							<span class="input-group-text">
 								<strong><s:text name="label.buscar.por"/></strong>
@@ -28,7 +28,7 @@
 									value="filtrar.opcoesCombo.codigo"									
 								/>
 								
-								<s:textfield cssClass="form-control" id="nome" name="filtrar.valorBusca"/>
+								<s:textfield cssClass="form-control" id="nome" name="filtrar.dataInicial"/>
 								<button class="btn btn-primary" type="submit"><s:text name="label.pesquisar"/></button>
 						</div>
 					</s:form>			
@@ -40,26 +40,35 @@
 					<thead>
 						<tr>
 							<th><s:text name="label.id"/></th>
-							<th><s:text name="label.nome"/></th>
+							<th><s:text name="label.id.exame"/></th>
+							<th><s:text name="label.nome.exame"/></th>
+							<th><s:text name="label.id.funcionario"/></th>
+							<th><s:text name="label.nome.funcionario"/></th>
+							<th><s:text name="label.data"/></th>
 							<th class="text-end mt-5"><s:text name="label.acao"/></th>
 						</tr>
 					</thead>
 					
 					<tbody>
-						<s:iterator value="funcionarios" >
+						<s:iterator value="examesRealizados" >
 							<tr>
 								<td>${rowid}</td>
-								<td>${nome}</td>
+								<td>${exameVo.rowid}</td>
+								<td>${exameVo.nome}</td>
+								<td>${funcionarioVo.rowid}</td>
+								<td>${funcionarioVo.nome}</td>
+								<td>${dataExame}</td>
 								<td class="text-end">
-									<s:url action="editarFuncionarios" var="editar">
-										<s:param name="funcionarioVo.rowid" value="rowid"></s:param>
+									<s:url action="editarRealizados" var="editar">
+										<s:param name="exameRealizadoVo.rowid" value="rowid"></s:param>
 									</s:url>
+
 									<a href="${editar}" class="btn btn-warning text-white">
 										<s:text name="label.editar"/>
 									</a>
-									
-									<s:url action="deletarFuncionarios" var="deletar">
-										<s:param name="funcionarioVo.rowid" value="rowid"></s:param>
+
+									<s:url action="deletarRealizados" var="deletar">
+										<s:param name="exameRealizadoVo.rowid" value="rowid"></s:param>
 									</s:url>
 									<a href="${deletar}" class="btn btn-danger">
 										<s:text name="label.excluir"/>
@@ -71,8 +80,8 @@
 					
 					<tfoot class="table-secondary">
 						<tr>
-							<td colspan="3">
-								<s:url action="novoFuncionarios" var="novo"/>
+							<td colspan="12">
+								<s:url action="novoRealizados" var="novo"/>
 								
 								<a href="${novo}" class="btn btn-success">
 									<s:text name="label.novo"/>
@@ -108,9 +117,9 @@
 					<s:text name="label.nao"/>
 				</a>
 	        	
-				<a id="excluir" href="${deletar}" class="btn btn-primary" style="width: 75px;">
+				<s:a id="excluir" class="btn btn-primary" style="width: 75px;">
 					<s:text name="label.sim"/>
-				</a>						
+				</s:a>						
 		      </div>
 		    </div>		    
 		  </div>

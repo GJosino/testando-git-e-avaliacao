@@ -27,9 +27,9 @@
         </action>
         
 		<action name="*Funcionarios" class="br.com.soc.sistema.action.funcionario.FuncionarioAction" method="{1}">
-        	<result name="success">/funcionario/testFunc_b.jsp</result>
-        	<result name="input">/funcionario/testFunc_i.jsp</result>
-        	<result name="update">/funcionario/testFunc_e.jsp</result>
+        	<result name="success">/funcionario/cadFuncionario_b.jsp</result>
+        	<result name="input">/funcionario/cadFuncionario_i.jsp</result>
+        	<result name="update">/funcionario/cadFuncionario_e.jsp</result>
         	<result name="redirect" type="redirectAction">todosFuncionarios</result>
         </action>
         
@@ -42,8 +42,6 @@
         
         <action name="*Relatorios" class="br.com.soc.sistema.action.relatorio.RelatorioAction" method="{1}">
         	<result name="success">/relatorio/relatorio_b.jsp</result>
-        	<result name="input">/relatorio/testrelatorio_b.jsp</result>
-        	<result name="update">/relatorio/testrelatorio_b.jsp</result>
         	<result name="redirect" type="redirectAction">todosRelatorios</result> 	     	
         </action>
         
