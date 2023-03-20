@@ -27,9 +27,9 @@ public class FuncionarioBusiness {
 			if(funcionarioVo.getNome().isEmpty())
 				throw new IllegalArgumentException("Nome nao pode ser em branco");
 			
-			Pattern pattern = Pattern.compile("\\d+"); // compila a expressão regular
+			Pattern pattern = Pattern.compile("\\d+");
 		    Matcher matcher = pattern.matcher(funcionarioVo.getNome());
-		    if (matcher.find()) { // verifica se não há correspondências na string
+		    if (matcher.find()) {
 		    	throw new IllegalArgumentException("Nome nao pode ter números");
 		      }
 			
@@ -47,21 +47,25 @@ public class FuncionarioBusiness {
 			case ID:
 				try {
 					Integer codigo = Integer.parseInt(filter.getValorBusca());
-					funcionarios.add(dao.findByCodigo(codigo));
+					funcionarios.addAll(dao.findByCodigo(codigo));
 				}catch (NumberFormatException e) {
 					throw new BusinessException(FOI_INFORMADO_CARACTER_NO_LUGAR_DE_UM_NUMERO);
 				}
 			break;
 
 			case NOME:
+				try {
 				funcionarios.addAll(dao.findAllByNome(filter.getValorBusca()));
+				}catch(Exception e) {
+					throw new BusinessException("Ocorreu algum erro desconhecido");
+				}
 			break;
 		}
 		
 		return funcionarios;
 	}
 	
-	public FuncionarioVo buscarFuncionarioPor(String codigo) {
+	public List<FuncionarioVo> buscarFuncionarioPor(String codigo) {
 		try {
 			Integer cod = Integer.parseInt(codigo);
 			return dao.findByCodigo(cod);
@@ -74,9 +78,9 @@ public class FuncionarioBusiness {
 			if(funcionarioVo.getNome().isEmpty())
 				throw new IllegalArgumentException("Nome nao pode ser em branco");
 			
-			Pattern pattern = Pattern.compile("\\d+"); // compila a expressão regular
+			Pattern pattern = Pattern.compile("\\d+"); 
 		    Matcher matcher = pattern.matcher(funcionarioVo.getNome());
-		    if (matcher.find()) { // verifica se não há correspondências na string
+		    if (matcher.find()) { 
 		    	throw new IllegalArgumentException("Nome nao pode ter números");
 		      }
 			Integer cod = Integer.parseInt(funcionarioVo.getRowid());

@@ -40,21 +40,25 @@ public class ExameBusiness {
 			case ID:
 				try {
 					Integer codigo = Integer.parseInt(filter.getValorBusca());
-					exames.add(dao.findByCodigo(codigo));
+					exames.addAll(dao.findByCodigo(codigo));
 				}catch (NumberFormatException e) {
 					throw new BusinessException(FOI_INFORMADO_CARACTER_NO_LUGAR_DE_UM_NUMERO);
 				}
 			break;
 
 			case NOME:
+				try {
 				exames.addAll(dao.findAllByNome(filter.getValorBusca()));
+				}catch(Exception e) {
+					throw new BusinessException("Ocorreu algum erro desconhecido");
+				}
 			break;
 		}
 		
 		return exames;
 	}
 	
-	public ExameVo buscarExamePor(String codigo) {
+	public List<ExameVo> buscarExamePor(String codigo) {
 		try {
 			Integer cod = Integer.parseInt(codigo);
 			return dao.findByCodigo(cod);

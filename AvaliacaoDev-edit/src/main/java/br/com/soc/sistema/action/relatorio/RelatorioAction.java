@@ -18,7 +18,6 @@ import br.com.soc.sistema.vo.FuncionarioVo;
 public class RelatorioAction extends Action {
 	private List<ExameRealizadoVo> examesRealizados = new ArrayList<>();
 	private ExameRealizadoBusiness business = new ExameRealizadoBusiness();
-	//private ExameRealizadoFilter filtrar = new ExameRealizadoFilter();
 	private RelatorioFilter filtrar = new RelatorioFilter();
 	private ExameRealizadoVo exameRealizadoVo = new ExameRealizadoVo();
 	
@@ -30,7 +29,7 @@ public class RelatorioAction extends Action {
 	
 	
 	public String todos() {
-		//getExamesRealizados().addAll(business.trazerTodosOsExamesRealizados());	
+			
 		return SUCCESS;
 	}
 	
@@ -47,7 +46,7 @@ public class RelatorioAction extends Action {
 		if(exameRealizadoVo.getRowid() == null)
 			return REDIRECT;
 		
-	//	String novoValor = exameRealizadoVo.getNome();
+	
 		if(exameRealizadoVo.getDataExame() == null) {
 			getExames().addAll(examesBusiness.trazerTodosOsExames());
 			getFuncionarios().addAll(funcionariosBusiness.trazerTodosOsFuncionarios());

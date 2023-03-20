@@ -12,7 +12,9 @@ import java.util.Collections;
 import java.util.List;
 
 import br.com.soc.sistema.dao.Dao;
+import br.com.soc.sistema.exception.DaoException;
 import br.com.soc.sistema.vo.ExameRealizadoVo;
+import br.com.soc.sistema.vo.ExameVo;
 
 public class ExameRealizadoDao extends Dao {
 
@@ -83,7 +85,7 @@ public class ExameRealizadoDao extends Dao {
 	}
 	
 	
-	public ExameRealizadoVo findByCodigo(Integer codigo){
+	public List<ExameRealizadoVo> findByCodigo(Integer codigo){
 		StringBuilder query = new StringBuilder("SELECT\n"
 				+ "exame_realizado.rowid id,\n"
 				+ "exame.rowid exame_id,\n"
@@ -105,7 +107,7 @@ public class ExameRealizadoDao extends Dao {
 			
 			try(ResultSet rs = ps.executeQuery()){
 				ExameRealizadoVo vo =  null;
-				
+				List<ExameRealizadoVo> exames = new ArrayList<>();
 				while (rs.next()) {
 					vo = new ExameRealizadoVo();
 					vo.setRowid(rs.getString("id"));
@@ -118,8 +120,10 @@ public class ExameRealizadoDao extends Dao {
 			        LocalDate dataParse = LocalDate.parse(rs.getString("data_exame"), formataEntrada);
 			        String dataExame = dataParse.format(formataSaida);
 					vo.setDataExame(dataExame);
+					
+					exames.add(vo);
 				}
-				return vo;
+				return exames;
 			}
 		}catch (SQLException e) {
 			e.printStackTrace();
@@ -172,7 +176,7 @@ public class ExameRealizadoDao extends Dao {
 			Connection con = getConexao();
 			PreparedStatement  ps = con.prepareStatement(query.toString())){
 			
-			//int i=1;
+			
 			ps.setInt(1, codigo);
 			ps.executeUpdate();
 		}catch (SQLException e) {
@@ -182,7 +186,7 @@ public class ExameRealizadoDao extends Dao {
 	
 	
 	
-	////////AQUI ESTOU FAZENDO OS MÉTODOS PRO FILTRO
+	////////FILTROS
 	// ID_EXAME, NOME_EXAME, ID_FUNCIONARIO, NOME_FUNCIONARIO E DATA EXAME REALIZADO
 
 	public List<ExameRealizadoVo> findByCodigoExame(Integer codigo){
@@ -416,7 +420,7 @@ public class ExameRealizadoDao extends Dao {
 	
 	
 	
-	/////////////////////////////////////////////RELATÓRIOS (PROCURAR POR DATA, POR DIA, MES, ANO)
+	////RELATÓRIOS (PROCURAR POR DATA, POR DIA, MES, ANO)
 		
 	
 	public List<ExameRealizadoVo> findRelatoriosData(String dataInicial, String dataFinal){
@@ -426,16 +430,12 @@ public class ExameRealizadoDao extends Dao {
 		if(!dataInicial.isEmpty()) {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 			dataInicialFormatada = LocalDate.parse(dataInicial, formatter);	
-		} //else {
-		//	dataInicialFormatada = null;
-		//}
+		} 
 		if(!dataFinal.isEmpty()){
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 			dataFinalFormatada = LocalDate.parse(dataFinal, formatter);
-		} //else {
-		//	dataFinalFormatada = null;
-		//}
-		
+		} 
+
 		StringBuilder query = new StringBuilder("SELECT\n"
 				+ "exame_realizado.rowid id,\n"
 				+ "exame.rowid exame_id,\n"
@@ -457,7 +457,7 @@ public class ExameRealizadoDao extends Dao {
 					query.append("WHERE exame_realizado.data_exame BETWEEN ? AND ?");
 				}
 					query.append("ORDER BY exame_realizado.data_exame DESC;");
-				//+ "WHERE exame_realizado.data_exame >= '2020-10-12';");
+				
 		try(Connection con = getConexao();
 			PreparedStatement ps = con.prepareStatement(query.toString())){
 			int i = 1;
@@ -528,7 +528,7 @@ public class ExameRealizadoDao extends Dao {
 					query.append("WHERE DAY(exame_realizado.data_exame) BETWEEN ? AND ?");
 				}
 				query.append("ORDER BY exame_realizado.data_exame DESC;");
-				//+ "WHERE exame_realizado.data_exame >= '2020-10-12';");
+				
 		try(Connection con = getConexao();
 			PreparedStatement ps = con.prepareStatement(query.toString())){
 			int i = 1;
@@ -597,7 +597,7 @@ public class ExameRealizadoDao extends Dao {
 					query.append("WHERE MONTH(exame_realizado.data_exame) BETWEEN ? AND ?");
 				}
 				query.append("ORDER BY exame_realizado.data_exame DESC;");
-				//+ "WHERE exame_realizado.data_exame >= '2020-10-12';");
+				
 		try(Connection con = getConexao();
 			PreparedStatement ps = con.prepareStatement(query.toString())){
 			int i = 1;
@@ -666,7 +666,7 @@ public class ExameRealizadoDao extends Dao {
 					query.append("WHERE YEAR(exame_realizado.data_exame) BETWEEN ? AND ?");
 				}
 				query.append("ORDER BY exame_realizado.data_exame DESC;");
-				//+ "WHERE exame_realizado.data_exame >= '2020-10-12';");
+				
 		try(Connection con = getConexao();
 			PreparedStatement ps = con.prepareStatement(query.toString())){
 			int i = 1;

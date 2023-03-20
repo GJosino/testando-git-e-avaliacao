@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.List;
 
 import br.com.soc.sistema.dao.Dao;
+import br.com.soc.sistema.vo.ExameVo;
 import br.com.soc.sistema.vo.FuncionarioVo;
 
 public class FuncionarioDao extends Dao {
@@ -80,7 +81,8 @@ public class FuncionarioDao extends Dao {
 		}		
 		return Collections.emptyList();
 	}
-	public FuncionarioVo findByCodigo(Integer codigo){
+	
+	public List<FuncionarioVo> findByCodigo(Integer codigo){
 		StringBuilder query = new StringBuilder("SELECT rowid id, nm_funcionario nome FROM funcionario ")
 								.append("WHERE rowid = ?");
 		
@@ -92,13 +94,16 @@ public class FuncionarioDao extends Dao {
 			
 			try(ResultSet rs = ps.executeQuery()){
 				FuncionarioVo vo =  null;
+				List<FuncionarioVo> funcionarios = new ArrayList<>();
 				
 				while (rs.next()) {
 					vo = new FuncionarioVo();
 					vo.setRowid(rs.getString("id"));
-					vo.setNome(rs.getString("nome"));	
+					vo.setNome(rs.getString("nome"));
+					
+					funcionarios.add(vo);
 				}
-				return vo;
+				return funcionarios;
 			}
 		}catch (SQLException e) {
 			e.printStackTrace();
@@ -128,7 +133,7 @@ public class FuncionarioDao extends Dao {
 			Connection con = getConexao();
 			PreparedStatement  ps = con.prepareStatement(query.toString())){
 			
-			//int i=1;
+			
 			ps.setInt(1, codigo);
 			ps.executeUpdate();
 		}catch (SQLException e) {

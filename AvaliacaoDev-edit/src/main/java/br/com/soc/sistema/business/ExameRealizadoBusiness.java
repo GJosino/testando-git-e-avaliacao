@@ -2,6 +2,7 @@ package br.com.soc.sistema.business;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +27,7 @@ public class ExameRealizadoBusiness {
 	public void salvarExameRealizado(ExameRealizadoVo exameRealizadoVo) {
 		try {
 			if(exameRealizadoVo.getDataExame().isEmpty())
-				throw new IllegalArgumentException("Nome nao pode ser em branco");
+				throw new IllegalArgumentException("Nome não pode ser em branco");
 			
 			Integer exameId = Integer.parseInt(exameRealizadoVo.getExameVo().getRowid());
 			Integer funcionarioId = Integer.parseInt(exameRealizadoVo.getFuncionarioVo().getRowid());
@@ -36,7 +37,8 @@ public class ExameRealizadoBusiness {
 		    
 			dao.insertExameRealizado(exameRealizadoVo, exameId, funcionarioId, dataExame);
 		} catch (Exception e) {
-			throw new BusinessException("Nao foi possivel realizar a inclusao do registro, todos os campos devem ser preenchidos e a data deve ser no formato DD/MM/YYYY");
+			throw new BusinessException("Não foi possível realizar a inclusão do registro, todos os campos devem ser preenchidos, a data deve ser no formato DD/MM/YYYY"
+					+ " e os dados não podem ser duplicados.");
 		}
 		
 	}
@@ -48,7 +50,7 @@ public class ExameRealizadoBusiness {
 			case ID:
 				try {
 					Integer codigo = Integer.parseInt(filter.getValorBusca());
-					examesRealizados.add(dao.findByCodigo(codigo));
+					examesRealizados.addAll(dao.findByCodigo(codigo));
 				}catch (NumberFormatException e) {
 					throw new BusinessException(FOI_INFORMADO_CARACTER_NO_LUGAR_DE_UM_NUMERO);
 				}
@@ -64,7 +66,11 @@ public class ExameRealizadoBusiness {
 			break;
 
 			case NOME_EXAME:
+				try {
 				examesRealizados.addAll(dao.findByNomeExame(filter.getValorBusca()));
+				} catch(Exception e) {
+					throw new BusinessException("Ocorreu um erro desconhecido");
+				}
 			break;
 			
 			case ID_FUNCIONARIO:
@@ -77,20 +83,27 @@ public class ExameRealizadoBusiness {
 			break;
 			
 			case NOME_FUNCIONARIO:
+				try {
 				examesRealizados.addAll(dao.findByNomeFuncionario(filter.getValorBusca()));
+				} catch(Exception e) {
+					throw new BusinessException("Ocorreu um erro desconhecido");
+				}
 			break;
 			
-			case DATA_EXAME:
+			case DATA_EXAME: try {
 				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 			    LocalDate dataExame = LocalDate.parse(filter.getValorBusca(), formatter);
 				examesRealizados.addAll(dao.findByDataExame(dataExame));
+				}catch(DateTimeParseException e) {
+					throw new BusinessException("Data inserida inválida, por favor insira uma data no formato dd/mm/yyyy");
+				}
 			break;
 		}
 		
 		return examesRealizados;
 	}
 	
-	public ExameRealizadoVo buscarExameRealizadoPor(String codigo) {
+	public List<ExameRealizadoVo> buscarExameRealizadoPor(String codigo) {
 		try {
 			Integer cod = Integer.parseInt(codigo);
 			return dao.findByCodigo(cod);
@@ -100,8 +113,6 @@ public class ExameRealizadoBusiness {
 	}
 	public void editarExameRealizado(ExameRealizadoVo exameRealizadoVo) {
 		try {
-	//		if(exameRealizadoVo.getNome().isEmpty())
-	//			throw new IllegalArgumentException("Nome nao pode ser em branco");
 			Integer cod = Integer.parseInt(exameRealizadoVo.getRowid());
 			Integer codExame = Integer.parseInt(exameRealizadoVo.getExameVo().getRowid());
 			Integer codFuncionario = Integer.parseInt(exameRealizadoVo.getFuncionarioVo().getRowid());
@@ -109,8 +120,8 @@ public class ExameRealizadoBusiness {
 			
 			
 			dao.UpdateByCodigo(cod, codExame, codFuncionario, dataExame);
-		}catch (NumberFormatException e) {
-			throw new BusinessException(FOI_INFORMADO_CARACTER_NO_LUGAR_DE_UM_NUMERO);
+		}catch (DateTimeParseException e) {
+			throw new BusinessException("Data inserida inválida, por favor insira uma data no formato dd/mm/yyyy");
 		}
 	}
 	
@@ -132,7 +143,7 @@ public class ExameRealizadoBusiness {
 	
 	
 	
-///////////////////////////////////////LOGICA DO RELATORIOS POR DATA, DIA, DIA, MES, ANO
+/////////RELATORIOS POR DATA, DIA, DIA, MES, ANO ///////////////////////
 	
 	
 	public List<ExameRealizadoVo> filtrarRelatorios(RelatorioFilter filter){
@@ -141,20 +152,16 @@ public class ExameRealizadoBusiness {
 		switch (filter.getOpcoesCombo()) {
 			case DATA:
 				try {
-					//Integer codigo = Integer.parseInt(filter.getDataInicial());
-					//examesRealizados.add(dao.findByCodigo(codigo));
-					
+			
 					examesRealizados.addAll(dao.findRelatoriosData(filter.getDataInicial(), filter.getDataFinal() ));
-				}catch (NumberFormatException e) {
-					throw new BusinessException(FOI_INFORMADO_CARACTER_NO_LUGAR_DE_UM_NUMERO);
+				}catch(DateTimeParseException e) {
+					throw new BusinessException("Data inserida inválida, por favor insira uma data no formato dd/mm/yyyy");
 				}
 			break;
 			
 			case DIA:
 				try {
-					//Integer codigo = Integer.parseInt(filter.getDataInicial());
-					//examesRealizados.add(dao.findByCodigo(codigo));
-					
+	
 					examesRealizados.addAll(dao.findRelatoriosDia(filter.getDataInicial(), filter.getDataFinal() ));
 				}catch (NumberFormatException e) {
 					throw new BusinessException(FOI_INFORMADO_CARACTER_NO_LUGAR_DE_UM_NUMERO);
@@ -163,9 +170,7 @@ public class ExameRealizadoBusiness {
 			
 			case MES:
 				try {
-					//Integer codigo = Integer.parseInt(filter.getDataInicial());
-					//examesRealizados.add(dao.findByCodigo(codigo));
-					
+		
 					examesRealizados.addAll(dao.findRelatoriosMes(filter.getDataInicial(), filter.getDataFinal() ));
 				}catch (NumberFormatException e) {
 					throw new BusinessException(FOI_INFORMADO_CARACTER_NO_LUGAR_DE_UM_NUMERO);
@@ -174,8 +179,6 @@ public class ExameRealizadoBusiness {
 			
 			case ANO:
 				try {
-					//Integer codigo = Integer.parseInt(filter.getDataInicial());
-					//examesRealizados.add(dao.findByCodigo(codigo));
 					
 					examesRealizados.addAll(dao.findRelatoriosAno(filter.getDataInicial(), filter.getDataFinal() ));
 				}catch (NumberFormatException e) {

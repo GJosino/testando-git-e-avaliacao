@@ -81,7 +81,7 @@ public class ExameDao extends Dao {
 		return Collections.emptyList();
 	}
 	
-	public ExameVo findByCodigo(Integer codigo){
+	public List<ExameVo> findByCodigo(Integer codigo){
 		StringBuilder query = new StringBuilder("SELECT rowid id, nm_exame nome FROM exame ")
 								.append("WHERE rowid = ?");
 		
@@ -93,13 +93,16 @@ public class ExameDao extends Dao {
 			
 			try(ResultSet rs = ps.executeQuery()){
 				ExameVo vo =  null;
+				List<ExameVo> exames = new ArrayList<>();
 				
 				while (rs.next()) {
 					vo = new ExameVo();
 					vo.setRowid(rs.getString("id"));
-					vo.setNome(rs.getString("nome"));	
+					vo.setNome(rs.getString("nome"));
+					
+					exames.add(vo);
 				}
-				return vo;
+				return exames;
 			}
 		}catch (SQLException e) {
 			e.printStackTrace();
@@ -128,7 +131,7 @@ public class ExameDao extends Dao {
 			Connection con = getConexao();
 			PreparedStatement  ps = con.prepareStatement(query.toString())){
 			
-			//int i=1;
+			
 			ps.setInt(1, codigo);
 			ps.executeUpdate();
 		}catch (SQLException e) {

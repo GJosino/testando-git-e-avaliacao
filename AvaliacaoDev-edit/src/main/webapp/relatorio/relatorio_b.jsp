@@ -27,8 +27,8 @@
 									listValueKey="%{descricao}"
 									value="filtrar.opcoesCombo.codigo"									
 								/>
-								<s:textfield placeholder="Data Inicial dd/mm/yyyy" cssClass="form-control" id="nome" name="filtrar.dataInicial"/>
-								<s:textfield placeholder="Data Final dd/mm/yyyy" cssClass="form-control" id="nome" name="filtrar.dataFinal"/>
+								<s:textfield placeholder="Data Inicial" cssClass="form-control" id="nome" name="filtrar.dataInicial"/>
+								<s:textfield placeholder="Data Final" cssClass="form-control" id="nome" name="filtrar.dataFinal"/>
 								<button class="btn btn-primary" type="submit"><s:text name="label.pesquisar"/></button>
 						</div>
 					</s:form>			

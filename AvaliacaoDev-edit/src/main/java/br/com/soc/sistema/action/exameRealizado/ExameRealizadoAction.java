@@ -56,7 +56,6 @@ public class ExameRealizadoAction extends Action {
 		if(exameRealizadoVo.getRowid() == null)
 			return REDIRECT;
 		
-	//	String novoValor = exameRealizadoVo.getNome();
 		if(exameRealizadoVo.getDataExame() == null) {
 			getExames().addAll(examesBusiness.trazerTodosOsExames());
 			getFuncionarios().addAll(funcionariosBusiness.trazerTodosOsFuncionarios());
